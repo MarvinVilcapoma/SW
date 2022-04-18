@@ -1,0 +1,115 @@
+/* You can add global styles to this file, and also import other style files */
+
+  html, body {
+      // font-family: 'Karla', sans-serif;
+      font-family: var(--font-family);
+      // background-color: #f5f5f5;
+      background-color: var(--surface-b);
+      // overflow: overlay;
+      background-color: #eeecee;
+      // background-color: #1F2D40;
+  }/* You can add global styles to this file, and also import other style files */
+
+  .text-color {
+    color: var(--text-color);
+  }
+
+  .myBg {
+    background-color: var(--surface-d);
+  }
+
+  .myBg2 {
+    background-color: var(--surface-a);
+  }
+
+  .myCard {
+    padding: 2rem;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+
+  .loginCard {
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+  }
+
+  .loginContainer {
+    margin-top: 16vh;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  .container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  // @media (min-width: 768px) {
+  //   .container {
+  //     width: 880px;
+  //   }
+  // }
+  // @media (min-width: 992px) {
+  //   .container {
+  //     width: 1050px;
+  //   }
+  // }
+  @media (min-width: 1300px) {
+    .container {
+      width: 1250px;
+    }
+  }
+
+  @media (min-width: 1740px) {
+    .container {
+      width: 1500px;
+    }
+  }
+
+
+  .p-button-primary {
+    background-color: #8a2d82e5 !important;
+  }
+
+  .wic_logo {
+    // height: 22rem;
+    // width: 30rem;
+    // background-image: url("~src/assets/img/wic_logo.png")
+    background: url('~src/assets/img/wic_logo.png') no-repeat;
+    // background-size: cover;
+    background-size: 50%;
+    background-position:center;
+    border-radius: 0px 6px 6px 0px;
+  }
+
+  .fullSreeen {
+    height: 99.1vh;
+  }
+
+  .myBtn {
+    height: 3.3rem;
+  }  .p-menuitem-link-active {
+    // border: 1px solid $my-primary-color !important;
+    // background-color:  lighten( $my-primary-color,10%)  !important; 
+    background-color:  var(--surface-d) !important; 
+    
+  }
+
+  .p-menuitem-link-active {
+    background-color:  #8a2d82e5 !important; 
+    color: #ffffff !important;
+  }
+
+  .p-menuitem-link-active a {
+    color: #ffffff !important;
+  }
+
+  .p-menuitem-link-active span {
+    color: #ffffff !important;
+  }
+
+  .p-megamenu {
+    background-color: #ffffff !important;
+  }

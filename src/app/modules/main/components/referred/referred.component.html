@@ -1,0 +1,45 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<div class="card myBg2 myCard p-mt-3"> 
+    <form autocomplete="off">
+      <h1 class="text-color" style="margin-top: 0;">Referir a Nutricionista</h1>
+  
+      <div class="p-fluid p-formgrid p-grid text-color">
+          <div class="p-field p-col">
+            <!-- <p-listbox [options]="participantList" [(ngModel)]="selectedParticipant" optionLabel="assignmentId"></p-listbox> -->
+            <label for="">Participantes</label>
+            <!-- <select pInputText>
+              <option value="">Seleccione un participante</option>
+              <option value="" *ngFor="let option of participantList">{{option.participant.firstName}}</option>
+            </select> -->
+            <!-- <p-dropdown [options]="participants" [(ngModel)]="referredRequest.assignment" name="participant" placeholder="Seleccione un Participante" optionLabel="participant.firstName" [showClear]="true"></p-dropdown> -->
+          </div>
+          <div class="p-field p-col">
+            <!-- <p-listbox [options]="participantList" [(ngModel)]="selectedParticipant" optionLabel="assignmentId"></p-listbox> -->
+            <label for="">Nutricionista</label>
+            <!-- <select pInputText>
+              <option value="">Seleccione un participante</option>
+              <option value="" *ngFor="let nutritionist of nutritionistList">{{nutritionist.firstName}}</option>
+            </select> -->
+            <!-- <p-dropdown [options]="nutritionist" [(ngModel)]="referredRequest.nutritionist" name="nutritionist" placeholder="Seleccione un Nutricionista" optionLabel="nutritionist.firstName" [showClear]="true"></p-dropdown> -->
+          </div>
+          
+      </div>
+      <div class="p-fluid p-formgrid p-grid text-color">
+        <div class="p-field p-col">
+          <label for="">Descripción</label>
+          <textarea pInputTextarea [rows]="5" [cols]="30" [autoResize]="false"></textarea>
+        </div>  
+      </div>
+      <div class="p-fluid p-formgrid p-grid text-color">
+        <!-- <div class="p-field p-col">
+          <button pButton class="p-button-primary myBtn" type="button" (click)="submit()" label="Guardar" ></button>
+        </div>
+  
+        <div class="p-field p-col">
+          <button pButton class="p-button-primary myBtn" type="button" (click)="submit10k()" label="Insertar 10 mil Registros" ></button>
+        </div> -->
+      </div>
+    </form>
+  </div>

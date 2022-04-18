@@ -1,0 +1,9 @@
+<div class="p-fluid p-grid">
+    <div class="p-field p-col-12 p-md-12 p-mt-2">
+      <h3 class="text-color" style="margin-bottom: 0.5rem;">
+        Conexión a internet &nbsp; 
+        <p-tag *ngIf="status" styleClass="p-mr-2" severity="success" value="ONLINE"></p-tag>
+        <p-tag *ngIf="!status" severity="danger" value="OFFLINE"></p-tag>
+      </h3>
+    </div> 
+</div>

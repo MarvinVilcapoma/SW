@@ -1,0 +1,62 @@
+
+<p-toast position="top-center" key="tl"></p-toast>
+ 
+<div class="loginContainer">
+    <div class="p-grid card myBg2 loginCard">
+        <!-- left -->
+        <div class="p-col-12 p-md-6 p-lg-5">
+            <!-- <div class="p-d-flex p-jc-center"> -->
+                <!-- <div class="card myBg2 myCard" style="width: 350px;"> -->
+                    <div class="p-d-flex" style="height: 100%;">
+                        <!-- LOGIN FORM -->
+                        <div class="p-mr-2 p-as-center">
+                            <div class="p-ml-4 p-mr-4" style="width: 95%;">
+                                <h1 style="margin-top: 5rem; font-size: 2.2rem;">Counselor App</h1>
+                                <form  (ngSubmit)="login()" [formGroup]="loginForm" autocomplete="off" class="p-mt-4">
+                                    <div class="p-fluid ">
+                                        <div class="p-field ">
+                                            <span class="p-float-label">
+                                                <input id="Username" 
+                                                    formControlName="username"
+                                                    type="text"  
+                                                    pInputText >
+                                                <label for="Username">Username</label>
+                                            </span>
+                                            <small *ngIf="isFieldValid('username')" id="username2-help" class="p-error">Username es requerido.</small>
+                                        </div>
+                                        <div class="p-field p-mt-4">
+                                            <span class="p-float-label">
+                                                <input id="Password" 
+                                                    formControlName="password"
+                                                    type="text" 
+                                                    pInputText >
+                                                <label for="Password">Password</label> 
+                                            </span>
+                                            <small *ngIf="isFieldValid('password')" id="password-help" class="p-error">Password es requerido.</small>
+                                        </div>
+                                        <div class="p-field">
+                                            <button pButton type="submit" label="Iniciar Sesión" class="myBtn p-button-primary"></button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div style="margin-top: 1rem; margin-bottom: 3rem;">
+                                    <app-connection-status ></app-connection-status>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            <!-- </div> -->
+        </div>
+        <!-- right -->
+        <div class="p-col-12 p-md-6 p-lg-7 wic_logo" style="background-color: #8a2d82e5;">
+            <!-- <div class="p-d-flex p-jc-center"> -->
+                <!-- <div class="p-d-flex" style="height: 100%;"> -->
+                    <!-- <div class="p-mr-2 p-as-center"> -->
+                        <!-- <div class="wic_logo"></div> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            <!-- </div> -->
+        </div>
+    </div>
+</div>

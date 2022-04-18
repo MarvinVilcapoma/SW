@@ -1,0 +1,37 @@
+<p-toast position="top-center" key="tc"></p-toast>
+<!-- list -->
+
+<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+
+<div class="card myBg2 myCard p-mt-3"> 
+    <h1 class="text-color" style="margin-top: 0;">Listado de contactos </h1>
+
+    <p-table [value]="contacts" styleClass="p-datatable-striped" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Página del {first} al {last} de {totalRecords} resultados" [rowsPerPageOptions]="[5,10,15,25]">
+      <ng-template pTemplate="header">
+          <tr>
+              <th> </th>
+              <th>Participante</th>
+              <th>Tipo de Contacto</th>
+              <th>Fecha de Creación</th>
+              <th>Descripción</th>
+              <th>Fecha de Inicio</th>
+              <th>Fecha de Fin</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-contact>
+          <tr>
+              <td> {{contacts.indexOf(contact)}} </td>
+              <td>{{contact.assignment?.participant?.firstName}}</td>
+              <td>{{contact.contactType?.description}}</td>
+              <!-- <td> {{contact.contactTypeId}}</td> -->
+              <td>{{contact.createdOn}}</td>
+              <td>{{contact.description}} </td>
+              <td>{{contact.startDate | date:'short'}} </td>
+              <td>{{contact.endDate | date:'short'}}</td>
+          </tr>
+      </ng-template>
+      
+    </p-table>
+    
+  </div>   
