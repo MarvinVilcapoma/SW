@@ -22,7 +22,9 @@ export class AuthService {
 
   logOut(){
     localStorage.clear();
+    console.log("logOut[]");
     this.router.navigate(['./auth/signIn']);
+    
   }
 
   verifyAuthentication(): boolean {

@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --base-href /CounselorApp/",
+    "build": "ng build --prod --base-href /CounselorsApp/",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "start-pwa": "ng build --prod --base-href=/ && http-server -p 8080 -c-1 dist/CounselorsApp"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@angular/service-worker": "~11.2.4",
     "@types/pouchdb-browser": "^6.1.3",
     "jwt-decode": "^3.1.2",
+    "ngx-connection-service": "^7.0.3",
     "ngx-spinner": "^11.0.2",
     "pouchdb-browser": "^7.2.2",
     "primeflex": "^2.0.0",

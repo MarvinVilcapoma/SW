@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  urlBase: 'https://enviodocumentos.wicpr.net/CounselorsAPI/'
+  //urlBase: 'https://enviodocumentos.wicpr.net/CounselorsAPI/'
+  urlBase: 'https://localhost:44305/'
 };
 
 /*

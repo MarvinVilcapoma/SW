@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Assignment } from 'src/app/data/schemas/assignment/assignment.interface';
 import { Counselor } from 'src/app/data/schemas/counselor/counselor.interface';
 import { User } from 'src/app/data/schemas/user/user.interface';
-import { User2 } from 'src/app/data/schemas/user/user2.interface';
 import { DatabaseService } from 'src/app/services/database.service';
-import { UserService } from 'src/app/services/user.service';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { ContactTypeService } from 'src/app/services/contactType.service';
-import { ContactType } from 'src/app/data/schemas/contactType/contactType.interface';
 import { Contact } from 'src/app/data/schemas/contact/contact.interface';
 import { Participant } from 'src/app/data/schemas/participant/participant.interface';
+import { ContactType } from 'src/app/data/schemas/contactType/contactType.interface';
+import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new',
@@ -22,150 +20,207 @@ import { Participant } from 'src/app/data/schemas/participant/participant.interf
   ]
 })
 export class NewComponent implements OnInit {
-
-  userjson !: User2[];
-
   counselorList!: Counselor[];
-
-  participantList: Assignment[] | any = [];
-  contactTypeList: ContactType[] | any = [];
-
-  // selectedParticipant: number = 0;
-  // selectedContactType: number = 0;
-
-  
-
-
-
+  titleHtml: String = "Nuevo contacto";
   user: User = new User();
-
   contact: Contact = new Contact();
-
-
-
   arrayUser: User[] = [];
-
+  
   counselorName!: string;
   userId!: number;
-
   home!: MenuItem; 
 
-  contactTypes!: Contact[];
+  isFieldValidParticipants: Boolean = false;
+  isFieldValidFechaContacto: Boolean = false;
+  isFieldValidTipoContacto: Boolean = false;
+  isFieldValidHoraInicio: Boolean = false;
+  isFieldValidHoraFin: Boolean = false;
+  isFieldValidDescripcion:  Boolean = false;
+
+  //Select Html
+  contactTypes!: ContactType[];
   participants!: Participant[];
 
   selectedParticipant!: string;
   selectedContactType!: string;
 
   constructor(
+    private router: Router,
     private dbService: DatabaseService,
     private messageService: MessageService,
-    private userService: UserService,
     private authService: AuthService,
-    private contactTypeService: ContactTypeService,
   ) { }
-  items: any;
+  
+  iSubMenuHtml: any;
 
   async ngOnInit() {
-
-
-    this.participantList[1];
-
-    this.items = [
-      {label: 'Contactos'},
-      {label: 'Nuevo'},
-    ];
-    this.home = {icon: 'pi pi-home'};
-
-    this.userjson = await this.dbService.getUsersJson();
-
+    this.home = { icon: 'pi pi-home'  };
+    this.iSubMenuHtml = [ { label: 'Contactos' }, { label: 'Nuevo' }, ];    
+    //this.userjson = await this.dbService.getUsersJson();
 
     var decoded: any = jwt_decode(this.authService.getToken());
     this.counselorName = decoded.fullname;
-    this.userId = decoded.id;
-
-    // console.log(this.userjson);
-
-    this.userService.getParticipantsForCounselor(this.userId).subscribe(res=>{
-      this.participantList = res.listado;
-      console.log(this.participantList)
-    });
-
-    this.contactTypeService.getContactTypes().subscribe(res=>{
-      this.contactTypeList = res.listado;
-    });
+    this.userId        = decoded.id;
 
     this.loadContactTypes();
-    this.loadParticipants();    
+    this.loadParticipants();  
+    
+    this.loadEdit();
   }
-
-
   loadContactTypes(){
-    this.contactTypes = [];
+    var decoded: any = jwt_decode(this.authService.getToken());
+    this.userId = decoded.id;
 
-    this.dbService.getContactType()
+    this.contactTypes = [];
+    this.dbService
+        .getContactType()
         .then((res: any) => {
+          //console.log(" loadContactTypes()==> dbService.getContactType().Then");
+
           let preContacts: any[] = [];
           res.rows.forEach(element => {
             preContacts.push(element.doc);
           });
           this.contactTypes = preContacts;
+          //console.log(" loadContactTypes()==> contactTypes");
+          //console.log(this.contactTypes);
         });
   } 
-
   loadParticipants(){
-    this.participants = [];
+    var decoded: any = jwt_decode(this.authService.getToken());
+    this.userId = decoded.id;
 
-    this.dbService.getParticipants()
+    this.participants = [];
+    this.dbService
+        .getParticipants()
         .then((res: any) => {
+          //console.log(" loadParticipants()==> dbService.getParticipants().Then");          
           let preContacts: any[] = [];
           res.rows.forEach(element => {
-            preContacts.push(element.doc);
+            if(element.doc.userAppID == this.userId)
+            {
+              //console.log(element.doc);
+              preContacts.push(element.doc);
+            }            
           });
           this.participants = preContacts;
+          //console.log(" loadParticipants()==> participants");
+          //console.log(this.participants);
         });
   } 
-
-  // onchangeParticipant(IdParticipant: number) {
-  //   console.log(IdParticipant);
-  //   this.contact.assignment.participant.firstName = `${this.participantList.find(x=>x.participantId == IdParticipant).firstName}`;
-  //   console.log(this.contact.assignment.participant.firstName);
-  // }
-  // onchangeContact(contactTypeId: number) {
-  //   console.log(contactTypeId);
-  //   this.contact.contactType.description = `${this.contactTypeList.find(x=>x.contactTypeId == contactTypeId).description}`;
-  //   console.log(this.contact.contactType.description)
-  // }
-
   submit(){
-    // this.dbService.addUSer(this.user);
-    // this.user = new User();
-    // this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Usuario agregado correctamente'});
+    if(this.isValForm()) 
+    {
+      console.log(this.contact.startDate);
+      var decoded: any = jwt_decode(this.authService.getToken());
+      this.userId = decoded.id;  
+      let contactNew = new Contact();
+      contactNew.contactId            = (this.contact.contactId !=null? this.contact.contactId : 0);
+      contactNew.assignmentId         = this.contact.participant.assignmentId;
+      contactNew.nameFullParticipante = this.contact.participant.fullName;
+      contactNew.contactTypeId        = this.contact.contactType.contactTypeId;
+      contactNew.nameFullContactType  = this.contact.contactType.description;    
+      contactNew.description = this.contact.description;
+      contactNew.createdOn   = this.contact.createdOn;
+      contactNew.startDate   = this.contact.startDate;
+      contactNew.endDate     = this.contact.endDate; 
+      contactNew.userAppID = this.userId;
+      contactNew.isSincronizado = false;
+      console.log(contactNew.startDate);
 
-    this.dbService.addContact(this.contact);
-    this.contact = new Contact();
-    this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Contacto agregado correctamente'});
-
-  }
-
-
-  submit10k(){
-    // let requestArray: User2 = new User2();
-    
-    for(let i= 0; i < this.userjson.length ; i++){
-      // requestArray.name = this.userjson[i].name;
-      // requestArray.lastname = this.userjson[i].lastname;
-      // requestArray.age = this.userjson[i].age;
-      // requestArray.email = this.userjson[i].email;
-      // this.dbService.addUserList(i);
-      // console.log(i);
-      this.dbService.addUserList(this.userjson[i]);
-      // requestArray = new User2();
-
+      if (localStorage.getItem('_dinamicUpdate')) {
+        contactNew._id = localStorage.getItem('_dinamicUpdate') as string;  
+        
+        this.dbService.updContact(contactNew);
+        this.contact = new Contact();
+        this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Se actualizo correctamente el Contacto.'});
+        localStorage.removeItem('_dinamicUpdate');
+        this.router.navigate(['./contacts/list']);
+      } 
+      else { 
+        console.log("Btn :: submit()--contact");  
+        this.dbService.addContact(contactNew);
+        this.contact = new Contact();
+        this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Se agregó correctamente el Contacto.'});
+        
+      }
     }
+    else{
+      console.log("submit()--->Validate");
+      this.messageService.add({key: 'tc', severity:'warn', summary: 'Validación', detail: 'Se requiere los campos obligatorios.'});
+    }
+  }
+  onFocusCalendar(){
+    let isHora = Date;
+    return formatDate(isHora.now(), "shortTime",'en-US');
+  }
+  isValString(x: string | null) {
+    if (x === null || x == null || x == ""|| x == undefined) {
+      return false;
+    }
+    return true;
+  }
+  isValForm(){
+    let isValidate = true;
+    
+    if(this.contact.participant == null){
+     isValidate = false;
+     this.isFieldValidParticipants = true;
+    } else { this.isFieldValidParticipants = false; }
+    
+    if(this.contact.contactType == null)
+    {
+       isValidate = false;
+       this.isFieldValidTipoContacto = true;
+    } else { this.isFieldValidTipoContacto = false; }
+    
+    if(this.contact.createdOn == null)
+    {
+       isValidate = false;
+       this.isFieldValidFechaContacto = true;
+    } else { this.isFieldValidFechaContacto = false; }
 
-    this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: '10 mil Usuarios agregados correctamente'});
+    if(this.contact.startDate == null)
+    {
+       isValidate = false;
+       this.isFieldValidHoraInicio = true;
+    } else { this.isFieldValidHoraInicio = false; }
 
+    if(this.contact.endDate == null)
+    {
+       isValidate = false;
+       this.isFieldValidHoraFin = true;
+    } else { this.isFieldValidHoraFin = false; }
 
+    if(!this.isValString(this.contact.description))
+    {
+       isValidate = false;
+       this.isFieldValidDescripcion = true;
+    } else { this.isFieldValidDescripcion = false; }
+
+    return isValidate;
   }
 
+  
+  loadEdit(){
+    let isId = localStorage.getItem('_dinamicUpdate') as string; 
+    if (localStorage.getItem('_dinamicUpdate')) {
+      this.titleHtml = "Editar contacto";
+      this.dbService
+      .getRegistroTransaccion(isId)
+      .then((res: any) => {
+        this.contact.contactId   = res.contactId;
+        this.contact.contactType = new ContactType();
+        this.contact.contactType.contactTypeId = res.contactTypeId;
+        this.contact.contactType.description = res.nameFullContactType;
+        this.contact.participant = new Participant();
+        this.contact.participant.assignmentId  = res.assignmentId;
+        this.contact.participant.fullName  = res.nameFullParticipante;
+        this.contact.description = res.description;
+        this.contact.createdOn   = res.createdOn;
+        this.contact.startDate   = new Date(res.startDate);
+        this.contact.endDate     = new Date(res.endDate);
+      });
+    } 
+  } 
 }

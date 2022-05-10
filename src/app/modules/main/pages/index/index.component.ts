@@ -3,40 +3,69 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MegaMenuItem, MenuItem, MessageService } from 'primeng/api';
 import { resourceUsage } from 'process';
-import { Contact } from 'src/app/data/schemas/contact/contact.interface';
-import { User } from 'src/app/data/schemas/user/user.interface';
-import { ConnectionService } from 'src/app/services/connection.service';
+import { SincronizarRequest, SincronizarResponse } from "src/app/data/schemas/sincronizar/sincronizar.interface";
 import { ContactService } from 'src/app/services/contact.service';
 import { DatabaseService } from 'src/app/services/database.service';
+import {ConfirmationService} from 'primeng/api';
+import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { ConnectionService } from 'ngx-connection-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
   providers:[
-    MessageService
+    MessageService, ConfirmationService
   ]
 })
 export class IndexComponent implements OnInit {
-
   contacts: any;
+  hasNetworkConnection!: boolean;
+  hasInternetAccess!: boolean;
+  statusConnection!: string;
 
   constructor( 
     private router: Router,
     private dbService: DatabaseService,
     private contactService: ContactService,
-    private messageService: MessageService
-    ){ 
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private authService: AuthService,
+    private connectionService: ConnectionService
+  )
+  { 
+    this.connectionService.updateOptions({
+      heartbeatExecutor: options => new Observable<any>(subscriber => {
+        if (Math.random() > .5) {
+          subscriber.next();
+          subscriber.complete();
+        } else {
+          throw new Error('Connection error');
+        }
+      })
+    });
+
+    this.connectionService.monitor().subscribe(currentState => {
+      this.hasNetworkConnection = currentState.hasNetworkConnection;
+      this.hasInternetAccess    = currentState.hasInternetAccess;
+
+      if (this.hasNetworkConnection) {
+        this.statusConnection = 'ONLINE';
+      } else {
+        this.statusConnection = 'OFFLINE';
+      }
+      console.log("hasNetworkConnection => " + this.hasNetworkConnection);
+      console.log("hasInternetAccess => " + this.hasInternetAccess);
+      console.log("statusConnection => " + this.statusConnection);
+    });
   }
 
   menuItems! : MenuItem[];
-
-
   items!: MenuItem[];
-  
-  ngOnInit() {
-    
 
+  ngOnInit() {
     this.menuItems = [
       {
         label: 'Listado',
@@ -61,60 +90,100 @@ export class IndexComponent implements OnInit {
         command: ()=>{
           // this.activeItem = this.items[0]; 
         }
-      }
-      
+      }      
     ]
-
-      // this.activeItem = this.items[0];
+    
+    this.syncContacts(false);
   }
   
-  syncContacts(){
-    this.contacts = [];
-    this.dbService.getContacts().then((res: any) => {
-      let preContacts: any[] = [];
-      res.rows.forEach(element => {
-        preContacts.push(element.doc);
-      });
-      this.contacts = preContacts;
+  syncContacts(Opt:boolean) {
+    if (this.hasNetworkConnection)
+    {
+      var decoded: any = jwt_decode(this.authService.getToken());
+      let isSincronizar: Boolean = false;
+      let oMensaje:string = "<b>¿Desea sincronizar la información registrada?</b>";
+      this.dbService.getSincronizarCount(Number(decoded.id))
+          .then((res: any) => 
+          {
+            //console.log("getSincronizarCount() =>");
+            //console.log(res);
+            if(res.iContactCount > 0){ 
+              oMensaje += "</br> - Cantidad de contacto a sincronizar : <b>" + res.iContactCount + "</b>";
+              isSincronizar = true;
+            }
+            if(res.iReferralCount > 0){ 
+              oMensaje += "</br> - Cantidad de referencias a sincronizar : <b>" + res.iReferralCount + "</b>";
+              isSincronizar = true;
+            }
+        
+            if(isSincronizar)
+            {
+              this.confirmationService.confirm({
+                message: oMensaje,
+                header: 'WIC',
+                icon: 'pi pi-info-circle',
+                acceptLabel: "SI",
+                accept: () => {
+                  console.log("syncContacts:: OK ---------");
+                  
+                  this.dbService.getSincronizarList(Number(decoded.id))
+                  .then((res: any) =>
+                  {
+                    console.log(res);                  
+                    let sincronizarRequest = new SincronizarRequest();
+                    sincronizarRequest.userId = Number(decoded.id);
+                    sincronizarRequest.listContacts = res.listContacts;
+                    sincronizarRequest.listReferreds = res.listReferreds;
 
-      // console.log(this.users);
-       console.log(this.contacts);
+                    this.contactService.Sincronizar(sincronizarRequest).subscribe((respt =>{
+                      console.log("Respuesta i: this.contactService.Sincronizar --->");
+                      console.log(respt);
+                      console.log("Respuesta f: this.contactService.Sincronizar --->");
 
-       let newContact = new Contact();
+                      if(respt.code == 0){
+                        this.messageService.add({ key: 'tc', severity:'success', summary: 'WIC', detail: 'Sincronizado correctamente'});
+                        if(respt.listado != null) {
+                          respt.listado.forEach(element => 
+                            {
+                              this.dbService.updEstadoSincronizacionTransaccion(element["_id"], element["contactId"]);   
+                            }); 
+                        }
 
-       for(let i=0; i < this.contacts.length; i++){
-         newContact.assignmentId = this.contacts[i].assignment.assignmentId;
-         newContact.contactTypeId = this.contacts[i].contactType.contactTypeId;
-         newContact.description = this.contacts[i].description;
-         newContact.createdOn = this.contacts[i].createdOn;
-         newContact.startDate = this.contacts[i].startDate;
-         newContact.endDate = this.contacts[i].endDate;
-         this.contactService.Insert(newContact).subscribe((resultado=>{
-           console.log(resultado);
-         }));
-
-         newContact = new Contact();
-       }
-
-
-    });
-    // this.contactService.Insert(newContat).subscribe((res=>{
-    //   console.log(res);
-    //   if(res.code == 0){
-    //     this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Sincronizado correctamente'});
-    //   }else{
-    //     this.messageService.add({key: 'tc', severity:'warn', summary: 'Éxito', detail: 'La sincronización ha fallado'});
-    //   }
-    // }));
+                        if(sincronizarRequest.listReferreds != null) {
+                          sincronizarRequest.listReferreds.forEach(element => 
+                            {
+                              this.dbService.delRegistroReferral(element._id);   
+                            }); 
+                        }
+                        
+                        setTimeout(()=> {                          
+                          localStorage.removeItem('_dinamicUpdate');
+                          window.location.reload();
+                        }, 1000); 
+                      }
+                      else{
+                        this.messageService.add({key: 'tc', severity:'warn', summary: 'WIC', detail: 'La sincronización ha fallado'});
+                      }
+                    }));
+                  });  
+                },
+                rejectLabel: "NO",
+                reject: () => { },
+                defaultFocus: "reject"
+              });
+            }
+            else 
+            {
+              if(Opt) {
+                this.messageService.add({key: 'tc', severity:'warn', summary: 'WIC', 
+                detail: 'No hay registros para sincronizar.'});
+              }            
+            }
+          }); 
+    }
+    else {
+      this.messageService.add({key: 'tc', severity:'warn', summary: 'WIC', 
+                               detail: 'Verifique su conexión a internet para poder sincronizar.'});
+    }
  }
-
-
-  
-
-  // sync(){
-  //   setTimeout(() => {
-  //     this.messageService.add({key: 'tc', severity:'success', summary: 'Éxito', detail: 'Sincronizado correctamente'});
-  //   }, 1000);
-  // }
-
 }

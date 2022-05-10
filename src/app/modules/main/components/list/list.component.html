@@ -1,37 +1,81 @@
-<p-toast position="top-center" key="tc"></p-toast>
+<p-toast position="top-center" key="tc"></p-toast> <!-- -->
 <!-- list -->
 
-<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-breadcrumb [model]="iSubMenuHtml" [home]="home"></p-breadcrumb>
 
-<div class="card myBg2 myCard p-mt-3"> 
+<div class="card myBg2 myCard p-mt-12"> 
     <h1 class="text-color" style="margin-top: 0;">Listado de contactos </h1>
+    <div class="table-responsive"></div>
+        <p-table [value]="contacts" class="p-datatable-scrollable-header-table content-table"
+                 [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
+                 currentPageReportTemplate="Página del {first} al {last} de {totalRecords} resultados" 
+                 [rowsPerPageOptions]="[5,10,15,25]"
+                 responsiveLayout="scroll"
+                 [scrollable]="true" >
+            <ng-template pTemplate="colgroup">
+                <colgroup>
+                    <!-- <col style="width: 5%;  vertical-align:middle;" /> -->
+                    <col style="width: 20%; vertical-align:middle;" />
+                    <col style="width: 20%; vertical-align:middle;" />
+                    <col style="width: 15%; vertical-align:middle;" />
+                    <col style="width: 15%; vertical-align:middle;" />
+                    <col style="width: 12%;  vertical-align:middle;" />
+                    <col style="width: 12%;  vertical-align:middle;" />
+                    <col style="width: 10%;  vertical-align:middle;" />
+                    <col style="width: 10%;  vertical-align:middle;" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+            <tr>
+                <!-- <th style="vertical-align:middle;text-align:center;font-size: 15px;" pFrozenColumn> </th> -->
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Participante</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Tipo Contacto</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Fecha</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Descripción</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Hora Inicio</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Hora Fin</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Eliminar</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Estado</th>
+            </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contact>
+            <tr>
+                <!-- <td align="center" style="vertical-align:middle;font-size: 15px;" pFrozenColumn>{{contact._id}} </td> -->
+                <td align="left"   style="vertical-align:middle;font-size: 14px;" pFrozenColumn>{{contact.nameFullParticipante}}</td>
+                <td align="center" style="vertical-align:middle;font-size: 14px;" pFrozenColumn>{{contact.nameFullContactType}}</td> 
+                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.createdOn | date:'MM/dd/yyyy'}}</td>
+                <td align="center" style="text-align:center;" > 
+                    <button pButton pRipple type="button" icon="pi pi-eye" pTooltip="Ver descripción" 
+                            (click)="clickView(contact.description)" 
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                </td>
+                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.startDate | date:'h:mm a'}} </td>
+                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.endDate | date:'h:mm a'}}</td>
+                
+                <td align="center" style="text-align:center">
+                    <i *ngIf="!contact.isSincronizado" class="pi pi-minus-circle" style="color: #fbc02d;" pTooltip="Pendiente Sincronizar"></i>
+                    <i *ngIf="contact.isSincronizado"  class="pi pi-check-circle" style="color: rgb(76, 175, 80);" pTooltip="Sincronizado"></i>
+                </td>
+                <td align="center" style="text-align:center">
+                    <button pButton pRipple type="button"  icon="pi pi-pencil" 
+                            (click)="clickEditar(contact)" pTooltip="Editar"
+                            class="p-button-rounded p-button-text"></button>
+                    <button pButton pRipple type="button" icon="pi pi-trash" 
+                            (click)="clickDelete(contact)"   pTooltip="Eliminar"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                </td>
+            </tr>
+            </ng-template>      
+        </p-table>  
+        
+        <p-dialog header="Descripción"  [(visible)]="display"  [style]="{width: '50vw'}">
+            <ng-template pTemplate="body"> {{modalDescription}} </ng-template>
+        </p-dialog>
+         
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
+                    >
+        </p-confirmDialog>
+        
+  </div>
 
-    <p-table [value]="contacts" styleClass="p-datatable-striped" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
-    currentPageReportTemplate="Página del {first} al {last} de {totalRecords} resultados" [rowsPerPageOptions]="[5,10,15,25]">
-      <ng-template pTemplate="header">
-          <tr>
-              <th> </th>
-              <th>Participante</th>
-              <th>Tipo de Contacto</th>
-              <th>Fecha de Creación</th>
-              <th>Descripción</th>
-              <th>Fecha de Inicio</th>
-              <th>Fecha de Fin</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-contact>
-          <tr>
-              <td> {{contacts.indexOf(contact)}} </td>
-              <td>{{contact.assignment?.participant?.firstName}}</td>
-              <td>{{contact.contactType?.description}}</td>
-              <!-- <td> {{contact.contactTypeId}}</td> -->
-              <td>{{contact.createdOn}}</td>
-              <td>{{contact.description}} </td>
-              <td>{{contact.startDate | date:'short'}} </td>
-              <td>{{contact.endDate | date:'short'}}</td>
-          </tr>
-      </ng-template>
-      
-    </p-table>
-    
-  </div>   
+   

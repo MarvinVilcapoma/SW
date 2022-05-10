@@ -7,9 +7,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment'; 
-import { PrimengModule } from './shared/modules/primeng.module'; 
+import { PrimengModule } from './shared/modules/primeng.module';  
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SecureInterceptorService } from './secure/interceptors/secure-interceptor.service';
+import {ConnectionServiceModule, ConnectionServiceOptions, ConnectionServiceOptionsToken} from 'ngx-connection-service';
+
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { SecureInterceptorService } from './secure/interceptors/secure-intercept
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
     })
+    ,ConnectionServiceModule
   ],
   providers: [
     {
@@ -34,6 +37,15 @@ import { SecureInterceptorService } from './secure/interceptors/secure-intercept
       useClass: SecureInterceptorService, 
       multi: true,
     },
+    {
+      provide: ConnectionServiceOptionsToken,
+      useValue: <ConnectionServiceOptions>{
+        enableHeartbeat: false,
+        heartbeatUrl: '/assets/ping.json',
+        requestMethod: 'get',
+        heartbeatInterval: 3000
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })

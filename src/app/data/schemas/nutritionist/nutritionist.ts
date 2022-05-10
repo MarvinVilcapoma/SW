@@ -6,6 +6,9 @@ export class Nutritionist{
     secondLastName!: string;
     email!:string;
     wicId!: string;
-    createdOn!: Date;
-    enabled!: boolean;
+
+    userAppID!: number;
+    fullName!: string;
+    _id!: string;
+    _rev!: string;
 }

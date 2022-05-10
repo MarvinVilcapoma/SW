@@ -59,13 +59,21 @@ export class HeaderComponent implements OnInit{
           }
         ]
       },
-      
-      
-  ];
+      //{
+      //  label: 'Pendiente Sincronizar',
+      //  icon: 'pi pi-fw pi-users',
+      //  style: 'color:red',
+      //  routerLink: '/contacts',
+      //  command: () => {
+      //      this.router.navigateByUrl(this.router.url);
+      //  } 
+      //} 
+    ];
   }
 
   logout(){
-    this.databaseService.destroy();
+    //this.databaseService.destroy();    
+    localStorage.removeItem('_dinamicUpdate');
     this.authService.logOut();
   }
 

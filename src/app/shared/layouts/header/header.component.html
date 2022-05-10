@@ -3,13 +3,14 @@
     <ng-template pTemplate="start">
       <img src="https://ebtshopper.com/wp-content/uploads/2017/09/PR-Logo-400x200.png" height="40" class="p-mr-2">
     </ng-template>
-    <ng-template pTemplate="end">
-      <button pButton type="button" (click)="logout()" label="Cerrar Sesión" icon="pi pi-power-off" class="p-ml-4 p-button-danger"></button> 
+    <ng-template pTemplate="end"> 
+      <button pButton type="button" (click)="logout()" label="Cerrar Sesión"
+              icon="pi pi-power-off" class="p-ml-4 p-button-danger"></button> 
     </ng-template>
   </p-menubar>
 </div>
 
-<div class="p-m-4">  
+<div class="p-m-12">  
       <div class="container">
         <router-outlet></router-outlet>
       </div>

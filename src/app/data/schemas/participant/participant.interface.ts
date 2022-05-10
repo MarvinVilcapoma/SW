@@ -8,6 +8,11 @@ export class Participant {
     userName!: string;
     password!: string;
     wicId!: string;
-    createdOn!: Date;
-    enabled!: boolean;
+
+    userAppID!: number;
+    assignmentId!: number;
+    fullName!: string;
+
+    _id!: string;
+    _rev!: string;
 }

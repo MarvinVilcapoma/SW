@@ -1,6 +1,8 @@
-export class ContactType{
+export class ContactType {
     contactTypeId!: number;
     description!: string;
-    createdOn!: Date;
-    enabled!: boolean;
+
+    userAppID!: number;
+    _id!: string;
+    _rev!: string;
 }

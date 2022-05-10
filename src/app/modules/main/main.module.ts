@@ -8,8 +8,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ListComponent } from './components/list/list.component';
 import { NewComponent } from './components/new/new.component';
 import { ReferredComponent } from './components/referred/referred.component';
-
-
+ 
 @NgModule({
   declarations: [
     IndexComponent,
@@ -21,7 +20,8 @@ import { ReferredComponent } from './components/referred/referred.component';
     CommonModule,
     MainRoutingModule,
     PrimengModule,
-    SharedModule
+    SharedModule,
+    
   ]
 })
 export class MainModule { }

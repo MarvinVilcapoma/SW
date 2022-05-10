@@ -1,82 +1,80 @@
 <p-toast position="top-center" key="tc"></p-toast>
 <!-- contact form -->
 
-<p-breadcrumb [model]="items" [home]="home"></p-breadcrumb>
+<p-breadcrumb [model]="iSubMenuHtml" [home]="home"></p-breadcrumb>
 
-<div class="card myBg2 myCard p-mt-3"> 
+<div class="card myBg2 myCard p-mt-12"> 
   <form autocomplete="off">
-    <h1 class="text-color" style="margin-top: 0;">Nuevo contacto </h1>
+    <h1 class="text-color" style="margin-top: 0;">{{titleHtml}}</h1>
 
     <div class="p-fluid p-formgrid p-grid text-color">
         <div class="p-field p-col">
           <label for="firstname2">Consejero</label>
-          <input [(ngModel)]="counselorName" name="counselorName" type="text" pInputText readonly> 
+          <input [(ngModel)]="counselorName" name="counselorName" 
+                 type="text" pInputText readonly style="background-color: #d9d8d9;" > 
         </div>
-        <!-- <div class="p-field p-col">
-          <label for="firstname2">Firstname</label>
-          <input [(ngModel)]="user.name" name="firstname2" type="text" pInputText> 
-        </div> -->
         <div class="p-field p-col">
-          <!-- <p-listbox [options]="participantList" [(ngModel)]="selectedParticipant" optionLabel="assignmentId"></p-listbox> -->
           <label for="">Participantes</label>
-          <!-- <select pInputText  [(ngModel)]="contact.assignmentId" #assignmentId="ngModel" name="assignmentId">  -->
-            <!-- <option [ngValue]="0" selected disabled >Seleccione un participante</option> -->
-            <!-- <option  *ngFor="let option of participantList">{{option.participant.firstName}}</option> -->
-
-            <!-- <option [ngValue]="option.assignmentId" *ngFor="let option of participantList">{{option.participant.firstName}}</option> -->
-          <!-- </select> -->
-          <p-dropdown [options]="participants" [(ngModel)]="contact.assignment" name="participant" placeholder="Seleccione un Participante" optionLabel="participant.firstName" [showClear]="true"></p-dropdown>
-
+          <p-dropdown [options]="participants" optionLabel="fullName" 
+                      [(ngModel)]="contact.participant" name="participant" 
+                      placeholder="Seleccione un Participante" 
+                      [ngClass]="!isFieldValidParticipants ? '':'ng-invalid ng-dirty'" 
+                      [showClear]="true"
+                      dataKey="value" ></p-dropdown>
+          <small *ngIf="isFieldValidParticipants" class="p-error block">Información requerida.</small>
         </div>
-        <!-- <div class="p-field p-col text-color">
-            <label for="lastname2">Lastname</label>
-            <input [(ngModel)]="user.lastname" name="lastname2" type="text" pInputText> 
-        </div> -->
     </div>
     <div class="p-fluid p-formgrid p-grid text-color" >
         <div class="p-field p-col">
-          <!-- <label for="Email">Email</label>
-          <input [(ngModel)]="user.email" name="Email" type="email" pInputText>  -->
           <label for="Email">Fecha de Contacto</label>
-          <input [(ngModel)]="contact.createdOn" name="contactDate" type="date" pInputText> 
+          <input [(ngModel)]="contact.createdOn" name="contactDate" type="date" pInputText
+                 [ngClass]="!isFieldValidFechaContacto ? '':'ng-invalid ng-dirty'" >
+          <small *ngIf="isFieldValidFechaContacto" class="p-error block">Información requerida.</small>
         </div>
         <div class="p-field p-col text-color">
-            <!-- <label for="edad">Edad</label>
-            <input [(ngModel)]="user.age" name="edad" type="text" pInputText>  -->
           <label for="">Tipo de Contacto</label>
-          <!-- <select pInputText  [(ngModel)]="contact.contactTypeId" #contactTypeId="ngModel" name="contactTypeId">
-            <option [ngValue]="0" selected disabled  >Seleccione un tipo de contacto</option>
-            <option  [ngValue]="contactType.contactTypeId"  name="" *ngFor="let contactType of contactTypeList">{{contactType.description}}</option>
-          </select> -->
-          <p-dropdown [options]="contactTypes" [(ngModel)]="contact.contactType" name="contactType" placeholder="Seleccione un Contacto" optionLabel="description" [showClear]="true"></p-dropdown>
+          <p-dropdown [options]="contactTypes" optionLabel="description" 
+                      [(ngModel)]="contact.contactType" name="contactType" 
+                      placeholder="Seleccione un Contacto"
+                      [ngClass]="!isFieldValidTipoContacto ? '':'ng-invalid ng-dirty'" 
+                      [showClear]="true"
+                      dataKey="value"></p-dropdown>
+          <small *ngIf="isFieldValidTipoContacto" class="p-error block">Información requerida.</small>
         </div>  
     </div>
     <div class="p-fluid p-formgrid p-grid text-color">
       <div class="p-field p-col">
         <label for="startTime">Hora Inicio</label>
-        <!-- <input [(ngModel)]="user.email" name="startTime" type="time" pInputText>  -->
-        <p-calendar [showTime]="true" [timeOnly]="true" hourFormat="12" placeholder="--:--" [(ngModel)]="contact.startDate" name="startDate"></p-calendar>
+        <p-calendar [showTime]="true" [timeOnly]="true" hourFormat="12" 
+                    placeholder="--:--"
+                    [ngClass]="!isFieldValidHoraInicio ? '':'ng-invalid ng-dirty'" 
+                    [(ngModel)]="contact.startDate" name="startDate"></p-calendar>
+        <small *ngIf="isFieldValidHoraInicio" class="p-error block">Información requerida.</small>
       </div>
       <div class="p-field p-col text-color">
         <label for="startEnd">Hora Fin</label>
-        <!-- <input [(ngModel)]="user.email" name="startEnd" type="time" pInputText>  -->
-        <p-calendar [showTime]="true" [timeOnly]="true" hourFormat="12" placeholder="--:--" [(ngModel)]="contact.endDate" name="endDate"></p-calendar>
+        <p-calendar [showTime]="true" [timeOnly]="true" hourFormat="12" 
+                    placeholder="--:--" 
+                    [ngClass]="!isFieldValidHoraFin ? '':'ng-invalid ng-dirty'" 
+                    [(ngModel)]="contact.endDate" name="endDate"></p-calendar>
+        <small *ngIf="isFieldValidHoraFin" class="p-error block">Información requerida.</small>
       </div>  
     </div>
     <div class="p-fluid p-formgrid p-grid text-color">
       <div class="p-field p-col">
         <label for="">Descripción</label>
-        <textarea pInputTextarea [rows]="5" [cols]="30" [autoResize]="false" [(ngModel)]="contact.description" name="description"></textarea>
+        <textarea pInputTextarea [rows]="5" [cols]="30" [autoResize]="false" 
+                  [(ngModel)]="contact.description" name="description"
+                  [ngClass]="!isFieldValidDescripcion ? '':'ng-invalid ng-dirty'" 
+                  maxlength="800" ></textarea>
+        <small *ngIf="isFieldValidDescripcion" class="p-error block">Información requerida.</small>
       </div>  
     </div>
     <div class="p-fluid p-formgrid p-grid text-color">
       <div class="p-field p-col">
-        <button pButton class="p-button-primary myBtn" type="button" (click)="submit()" label="Guardar" ></button>
+        <button pButton class="p-button-primary myBtn" type="button"
+                (click)="submit()" label="Guardar" ></button>
       </div>
-
-      <!-- <div class="p-field p-col">
-        <button pButton class="p-button-primary myBtn" type="button" (click)="submit10k()" label="Insertar 10 mil Registros" ></button>
-      </div> -->
     </div>
   </form>
 </div>
