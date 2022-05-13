@@ -12,11 +12,12 @@ export class Contact{
     contactType!: ContactType;
     participant!: Participant;
 
+    contactDate!: Date;
     startDate!: Date;
     endDate!: Date;
     
-    createdOn!: Date;
-    
+    createdOn!: Date;    
+
     userAppID!: number;
     nameFullParticipante!: string;
     nameFullContactType!: string;

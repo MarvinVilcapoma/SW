@@ -124,6 +124,7 @@ export class DatabaseService {
                   contactNew.nameFullContactType  = element.doc.nameFullContactType;    
                   contactNew.description          = element.doc.description;
                   contactNew.createdOn            = element.doc.createdOn;
+                  contactNew.contactDate          = element.doc.contactDate;
                   contactNew.startDate            = element.doc.startDate;
                   contactNew.endDate              = element.doc.endDate;                    
                   contactNew.userAppID            = element.doc.userAppID;
@@ -275,6 +276,7 @@ export class DatabaseService {
           nameFullContactType: doc["nameFullContactType"],
           description: doc["description"],
           createdOn: doc["createdOn"],
+          contactDate: doc["contactDate"],
           startDate: doc["startDate"],
           endDate: doc["endDate"],
           userAppID: doc["userAppID"]
@@ -326,6 +328,7 @@ export class DatabaseService {
           contactNew.nameFullContactType  = doc["nameFullContactType"];    
           contactNew.description          = doc["description"];
           contactNew.createdOn            = doc["createdOn"];
+          contactNew.contactDate          = doc["contactDate"];
           contactNew.startDate            = doc["startDate"];
           contactNew.endDate              = doc["endDate"];                    
           contactNew.userAppID            = doc["userAppID"];

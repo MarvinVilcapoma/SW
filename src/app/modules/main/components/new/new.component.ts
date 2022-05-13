@@ -121,7 +121,8 @@ export class NewComponent implements OnInit {
       contactNew.contactTypeId        = this.contact.contactType.contactTypeId;
       contactNew.nameFullContactType  = this.contact.contactType.description;    
       contactNew.description = this.contact.description;
-      contactNew.createdOn   = this.contact.createdOn;
+      contactNew.createdOn   = new Date();
+      contactNew.contactDate   = this.contact.contactDate;
       contactNew.startDate   = this.contact.startDate;
       contactNew.endDate     = this.contact.endDate; 
       contactNew.userAppID = this.userId;
@@ -174,7 +175,7 @@ export class NewComponent implements OnInit {
        this.isFieldValidTipoContacto = true;
     } else { this.isFieldValidTipoContacto = false; }
     
-    if(this.contact.createdOn == null)
+    if(this.contact.contactDate == null)
     {
        isValidate = false;
        this.isFieldValidFechaContacto = true;
@@ -218,6 +219,7 @@ export class NewComponent implements OnInit {
         this.contact.participant.fullName  = res.nameFullParticipante;
         this.contact.description = res.description;
         this.contact.createdOn   = res.createdOn;
+        this.contact.contactDate = res.contactDate;
         this.contact.startDate   = new Date(res.startDate);
         this.contact.endDate     = new Date(res.endDate);
       });

@@ -19,11 +19,15 @@ export class ConnectionStatusComponent implements OnInit {
     ) { }
 
   ngOnInit(): void { 
-    //this.cs.test()
-    //    .subscribe(
-    //      res => { this.status = true; },
-    //      err => {  this.status = false; }
-    //    ) 
+    this.cs.ValidateConexion()
+        .subscribe(
+         res => { 
+            this.status = true; 
+          },
+          err => {  
+            this.status = false; 
+          }
+        ) 
   }
 
 }

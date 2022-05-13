@@ -30,8 +30,9 @@
                 <!-- <th style="vertical-align:middle;text-align:center;font-size: 15px;" pFrozenColumn> </th> -->
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Participante</th>
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Tipo Contacto</th>
-                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Fecha</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Fecha Creación</th>
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Descripción</th>
+                <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Fecha Contacto</th>
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Hora Inicio</th>
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" >Hora Fin</th>
                 <th style="vertical-align:middle;text-align:center;font-size: 14px;" pFrozenColumn>Eliminar</th>
@@ -49,6 +50,7 @@
                             (click)="clickView(contact.description)" 
                             class="p-button-rounded p-button-text p-button-danger"></button>
                 </td>
+                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.contactDate | date:'MM/dd/yyyy'}}</td>
                 <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.startDate | date:'h:mm a'}} </td>
                 <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.endDate | date:'h:mm a'}}</td>
                 

@@ -27,7 +27,7 @@
     <div class="p-fluid p-formgrid p-grid text-color" >
         <div class="p-field p-col">
           <label for="Email">Fecha de Contacto</label>
-          <input [(ngModel)]="contact.createdOn" name="contactDate" type="date" pInputText
+          <input [(ngModel)]="contact.contactDate" name="contactDate" type="date" pInputText
                  [ngClass]="!isFieldValidFechaContacto ? '':'ng-invalid ng-dirty'" >
           <small *ngIf="isFieldValidFechaContacto" class="p-error block">Información requerida.</small>
         </div>
