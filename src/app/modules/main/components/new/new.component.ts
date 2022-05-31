@@ -34,6 +34,7 @@ export class NewComponent implements OnInit {
   isFieldValidFechaContacto: Boolean = false;
   isFieldValidTipoContacto: Boolean = false;
   isFieldValidHoraInicio: Boolean = false;
+  isFieldValidHoraInicioMenor: Boolean = false;
   isFieldValidHoraFin: Boolean = false;
   isFieldValidDescripcion:  Boolean = false;
 
@@ -192,6 +193,11 @@ export class NewComponent implements OnInit {
        isValidate = false;
        this.isFieldValidHoraFin = true;
     } else { this.isFieldValidHoraFin = false; }
+
+    if(this.contact.startDate >= this.contact.endDate){
+      isValidate = false;
+      this.isFieldValidHoraInicioMenor = true;
+    } else{this.isFieldValidHoraInicioMenor = false; }
 
     if(!this.isValString(this.contact.description))
     {

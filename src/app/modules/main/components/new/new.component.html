@@ -9,7 +9,7 @@
 
     <div class="p-fluid p-formgrid p-grid text-color">
         <div class="p-field p-col">
-          <label for="firstname2">Consejero</label>
+          <label for="firstname2">Consejera Par</label>
           <input [(ngModel)]="counselorName" name="counselorName" 
                  type="text" pInputText readonly style="background-color: #d9d8d9;" > 
         </div>
@@ -29,6 +29,7 @@
           <label for="Email">Fecha de Contacto</label>
           <input [(ngModel)]="contact.contactDate" name="contactDate" type="date" pInputText
                  [ngClass]="!isFieldValidFechaContacto ? '':'ng-invalid ng-dirty'" >
+          <!-- <p-calendar placeholder=" mm/dd/aaaa --:--" [(ngModel)]="contact.createdOn" [showTime]="true" [showSeconds]="true" inputId="time" [ngClass]="!isFieldValidFechaContacto ? '':'ng-invalid ng-dirty'"></p-calendar>        -->
           <small *ngIf="isFieldValidFechaContacto" class="p-error block">Información requerida.</small>
         </div>
         <div class="p-field p-col text-color">
@@ -47,9 +48,10 @@
         <label for="startTime">Hora Inicio</label>
         <p-calendar [showTime]="true" [timeOnly]="true" hourFormat="12" 
                     placeholder="--:--"
-                    [ngClass]="!isFieldValidHoraInicio ? '':'ng-invalid ng-dirty'" 
+                    [ngClass]="!isFieldValidHoraInicio || !isFieldValidHoraInicioMenor ? '' :'ng-invalid ng-dirty'" 
                     [(ngModel)]="contact.startDate" name="startDate"></p-calendar>
         <small *ngIf="isFieldValidHoraInicio" class="p-error block">Información requerida.</small>
+        <small *ngIf="isFieldValidHoraInicioMenor" class="p-error block">La fecha de inicio no puede ser mayor a la fecha fin.</small>
       </div>
       <div class="p-field p-col text-color">
         <label for="startEnd">Hora Fin</label>

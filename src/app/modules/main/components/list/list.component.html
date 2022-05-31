@@ -44,7 +44,7 @@
                 <!-- <td align="center" style="vertical-align:middle;font-size: 15px;" pFrozenColumn>{{contact._id}} </td> -->
                 <td align="left"   style="vertical-align:middle;font-size: 14px;" pFrozenColumn>{{contact.nameFullParticipante}}</td>
                 <td align="center" style="vertical-align:middle;font-size: 14px;" pFrozenColumn>{{contact.nameFullContactType}}</td> 
-                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.createdOn | date:'MM/dd/yyyy'}}</td>
+                <td align="center" style="vertical-align:middle;font-size: 14px;" >{{contact.createdOn | date:'MM/dd/yyyy h:mm a'}}</td>
                 <td align="center" style="text-align:center;" > 
                     <button pButton pRipple type="button" icon="pi pi-eye" pTooltip="Ver descripción" 
                             (click)="clickView(contact.description)" 
