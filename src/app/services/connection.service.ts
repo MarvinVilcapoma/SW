@@ -11,7 +11,7 @@ export class ConnectionService {
 
   }
 
-  //test(){
-  //  return this.httpClient.post(`${environment.urlBase}api/auth/login`, {});
-  //}
+  test(){
+   return this.httpClient.post(`${environment.urlBase}api/auth/login`, {});
+  }
 }
